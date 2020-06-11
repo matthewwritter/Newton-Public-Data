@@ -9,7 +9,9 @@ import matplotlib.pyplot as plt
 ######  PARAMS  ######
 ######################
 FP_EER = os.path.join('data','eer16.csv')
-FP_EER_CLEAN = os.path.join('data','eer16_clean.csv')
+FP_EER_CLEAN_CSV = os.path.join('data','eer16_clean.csv')
+FP_EER_CLEAN_FEATHER = os.path.join('data','eer16_clean.feather')
+
 
 #############################
 ######  PRECONDITIONS  ######
@@ -69,8 +71,9 @@ for idx, row in eer.iterrows():
     assert np.round(pay.sum(),2) == pay_total
 
 # set data types
-eer = eer.infer_objects()
+eer = eer.infer_objects().reset_index(drop=True)
 eer.loc[:,:'Job Title'] = eer.loc[:,:'Job Title'].astype('category')
 
 # save cleaned csv
-eer.to_csv(FP_EER_CLEAN)
+eer.to_csv(FP_EER_CLEAN_CSV)
+eer.to_feather(FP_EER_CLEAN_FEATHER)
