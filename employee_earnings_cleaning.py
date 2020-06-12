@@ -1,5 +1,5 @@
 """ Author: Benyamin Meschede-Krasa 
-script_description """
+clean Earnings report for  """
 import os
 import numpy as np
 import pandas as pd
