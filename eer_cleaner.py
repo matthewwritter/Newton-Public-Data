@@ -10,7 +10,7 @@ import tabula
 ######  PARAMS  ######
 ######################
 
-COLUMNS = ['Department',
+EER_COLUMNS = ['Department',
            'Employee Name',
            'Job Title',
            'Regular',
@@ -23,7 +23,7 @@ COLUMNS = ['Department',
            'Total Pay']
 
 
-def clean_pdf(fp_pdf):
+def clean_pdf(fp_pdf,columns = EER_COLUMNS):
     """pdf scraper for employee earnings reports from 
     Employee earnings reports for Newton, MA
 
@@ -47,9 +47,9 @@ def clean_pdf(fp_pdf):
         table = table.dropna(thresh=3).reset_index(drop=True)
         if table.isna().any().any():
             table.dropna(thresh=3,axis=1,inplace=True)
-            table.columns = COLUMNS
+            table.columns = columns
         else:
-            table.columns = COLUMNS
+            table.columns = columns
         
         tables_clean.append(table)
     
@@ -57,7 +57,7 @@ def clean_pdf(fp_pdf):
     eer = pd.concat(tables_clean).drop_duplicates(keep=False,ignore_index=True)
     
     # clean commas for conversion to float
-    for pay_type in COLUMNS[2:]:
+    for pay_type in columns[2:]:
         eer.loc[:,pay_type] = eer[pay_type].str.replace(',','')
     eer.loc[:,'Regular':] = eer.loc[:,'Regular':].astype(float)
     eer = eer.infer_objects().reset_index(drop=True)
